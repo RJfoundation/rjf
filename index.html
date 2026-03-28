@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>রুপসা জনকল্যাণ ফাউন্ডেশন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header id="main-header">
+        <canvas id="fireworks-canvas"></canvas>
+        
+        <div class="lantern-box left"><i class="fas fa-fan"></i></div>
+        <div class="lantern-box right"><i class="fas fa-fan"></i></div>
+
+        <div class="top-nav">
+            <button class="glass-btn" onclick="toggleLanguage()" id="langBtn">English</button>
+            <button class="glass-btn" onclick="toggleDarkMode()" id="themeIcon">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+
+        <div class="header-content">
+            <div class="logo-wrapper">
+                <img src="https://i.ibb.co.com/ycsrjKp6/20251128-004458.jpg" alt="RJF Logo" class="logo-img">
+            </div>
+            <h1 id="title">রুপসা জনকল্যাণ ফাউন্ডেশন</h1>
+        </div>
+        
+          <div class="menu-trigger" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+</div>
+
+<nav class="sidebar" id="mySidebar">
+    <div class="sidebar-header">
+        <h3>মেনু</h3>
+        <i class="fas fa-times" onclick="toggleSidebar()"></i>
+    </div>
+    <ul class="sidebar-links">
+        <li><a href="#"><i class="fas fa-home"></i> হোম</a></li>
+        <li><a href="#"><i class="fas fa-info-circle"></i> আমাদের লক্ষ্য</a></li>
+        <li><a href="#"><i class="fas fa-tasks"></i> কার্যক্রম</a></li>
+        <li><a href="#"><i class="fas fa-users"></i> ভলান্টিয়ার</a></li>
+        <li class="divider"></li>
+        <li><a href="#" class="side-donate"><i class="fas fa-heart"></i> দান করুন</a></li>
+    </ul>
+</nav>
+
+<div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+        
+    </header>
+    <div class="notice-section">
+    <div class="notice-title">
+        <i class="fas fa-bullhorn"></i> সর্বশেষ নোটিশ
+    </div>
+    <div class="notice-container">
+        <div class="moving-text" id="noticeContent">
+            রুপসা জনকল্যাণ ফাউন্ডেশনের পক্ষ থেকে সকলকে জানাই আন্তরিক শুভেচ্ছা। আমাদের নতুন ভলান্টিয়ার নিয়োগ চলছে। বিস্তারিত জানতে যোগাযোগ করুন। অসহায় মানুষের সেবায় এগিয়ে আসুন।
+        </div>
+    </div>
+</div>
+
+<div class="quote-section">
+    <div class="quote-card">
+        <i class="fas fa-quote-left"></i>
+        <p id="quoteText">মানবিকতায় আমাদের পরিচয়...</p>
+        <span id="quoteAuthor">- মহাত্মা গান্ধী</span>
+    </div>
+</div>
+
+
+<section class="about-boxes">
+    <div class="section-title">
+        <h2>আমাদের সম্পর্কে</h2>
+        <div class="title-underline"></div>
+        <p>সেবা হোক প্রত্যয়, জনকল্যাণ হোক জয়</p>
+    </div>
+
+    <div class="box-container">
+        <div class="info-box">
+            <div class="box-icon-bg"><i class="fas fa-info-circle"></i></div>
+            <h3>ফাউন্ডেশন পরিচিতি</h3>
+            <p class="intro-text">রুপসা জনকল্যাণ ফাউন্ডেশন একটি মানবিক, অরাজনৈতিক ও সেবা মূলক সংগঠন।</p>
+        </div>
+
+        <div class="info-box">
+            <div class="box-icon-bg"><i class="fas fa-bullseye"></i></div>
+            <h3>আমাদের লক্ষ্য ও উদ্দেশ্য</h3>
+            <ul class="point-list">
+                <li><i class="fas fa-check-circle"></i> <span>অসহায় ও দরিদ্র মানুষের জীবন মান উন্নত করা।</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>সামাজিক সচেতনতা ও মানবিক সহায়তা প্রদান।</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>প্রাকৃতিক দূর্যোগে দরিদ্র পরিবারের পাশে দাঁড়ানো।</span></li>
+                <li><i class="fas fa-check-circle"></i> <span>খেলাধুলা ও সাংস্কৃতিক অনুষ্ঠানের আয়েজন করা।</span></li>
+            </ul>
+        </div>
+
+        <div class="info-box">
+            <div class="box-icon-bg"><i class="fas fa-file-contract"></i></div>
+            <h3>শর্তাবলি</h3>
+            <ul class="point-list">
+                <li><i class="fas fa-arrow-alt-circle-right"></i> <span>নিজ ইচ্ছায় ফাউন্ডেশনের কাজে আগ্রহী হতে হবে।</span></li>
+                <li><i class="fas fa-arrow-alt-circle-right"></i> <span>সকল সদস্যের সাথে সহযোগিতামূলক সম্পর্ক রাখা।</span></li>
+                <li><i class="fas fa-arrow-alt-circle-right"></i> <span>১-১৫ তারিখের মধ্যে মাসিক অনুদান পরিশোধ করা।</span></li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<div class="info-card leadership-section">
+    <h3 class="section-title-leadership"><i class="fas fa-users-cog"></i>আমাদের স্থায়ী কমিটি</h3>
+    
+    <div class="leadership-grid">
+        
+        <div class="member-item" onclick="showMember('Engineer Rafiqul Islam', 'প্রতিষ্ঠাতা ও চেয়ারম্যান', 'বিএসসি ইঞ্জিনিয়ার। তিনি আমাদের ফাউন্ডেশনে স্বচ্ছতার সাথে কাজ করে যাচ্ছে এবং অসহায় ও দরিদ্র মানুষের পাশে সর্বদা নিজেকে নিয়োজিত রাখে।।', 'https://i.ibb.co.com/GvXXrwf7/FB-IMG-1771418638416.jpg')">
+            <img src="https://i.ibb.co.com/GvXXrwf7/FB-IMG-1771418638416.jpg" class="member-thumb">
+            <h4>Engr. Rafiqul Islam</h4>
+            <p>tap now</p>
+        </div>
+
+        <div class="member-item" onclick="showMember('Harunor Roshid', 'প্রতিষ্ঠাতা পরিচালক', 'ফাউন্ডেশন এর লক্ষ্য ও পারিপাশ্বিক দিক খেয়াল করে সিদ্বান্ত গ্রহণ ও বাস্তবায়নের লক্ষ্যে কাজ করা', 'https://i.ibb.co.com/PzfpYJm9/FB-IMG-1771418626588.jpg')">
+            <img src="https://i.ibb.co.com/PzfpYJm9/FB-IMG-1771418626588.jpg" class="member-thumb">
+            <h4>Harunor Roshid</h4>
+            <p>tap now</p>
+        </div>
+
+        <div class="member-item" onclick="showMember('MD Abdus Sattar', 'কোষাধ্যক্ষ', 'আর্থিক স্বচ্ছতা এবং ফান্ডের হিসাব রাখার দায়িত্বে নিয়োজিত আছেন।', 'https://i.ibb.co.com/ynnR8jyV/img-2-1771574187607.jpg')">
+            <img src="https://i.ibb.co.com/ynnR8jyV/img-2-1771574187607.jpg" class="member-thumb">
+            <h4>MD Abdus Sattar</h4>
+            <p>tap now</p>
+        </div>  
+        
+         <div class="member-item" onclick="showMember('Md Omar Faruqe', 'সভাপতি', 'ফাউন্ডেশন এর কার্যক্রম তদারকি করা ও ফাউন্ডেশন এর কাজ কি এগিয়ে নিয়ে যাওয়া।', 'https://i.ibb.co.com/NnWNhPHh/1774421801136.jpg')">
+            <img src="https://i.ibb.co.com/NnWNhPHh/1774421801136.jpg" class="member-thumb">
+            <h4>MD Abdus Sattar</h4>
+            <p>tap now</p>
+        </div> 
+        
+        <div class="member-item" onclick="showMember('imran ahmed', 'প্রচার সম্পাদক ', 'ফাউন্ডেশন এর কার্যক্রম তদারকি করা ও ফাউন্ডেশন এর কাজ কি এগিয়ে নিয়ে যাওয়া।', 'https://i.ibb.co.com/NnWNhPHh/1774421801136.jpg')">
+            <img src="https://i.ibb.co.com/NnWNhPHh/1774421801136.jpg" class="member-thumb">
+            <h4>MD Abdus Sattar</h4>
+            <p>tap now</p>
+        </div> 
+
+    </div>
+</div>
+
+<div id="memberModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <img id="m-img" class="modal-img-circle" src="">
+        <h3 id="m-name" class="modal-name-text"></h3>
+        <p id="m-role" class="modal-role-text"></p>
+        <p id="m-desc" class="modal-desc-text"></p>
+        <button class="modal-close-btn" onclick="closeModal()"> CLOSE</button>
+    </div>
+</div>
+
+
+
+<section class="location-section">
+    <div class="location-box">
+        <h3 class="location-title">
+            <i class="fas fa-map-marker-alt"></i> আমাদের অবস্থান
+        </h3>
+        
+        <div class="location-details">
+            <p><strong>ঠিকানা:</strong> রূপসা,সিরাজগঞ্জ,পশ্চিম পাড়া, বাংলাদেশ।</p>
+            <p><strong>মোবাইল:</strong>+8801957329211</p>
+            <p><strong>ইমেইল:</strong>info.rjfoundation25@gmail.com</p>
+        </div>
+
+        <div class="map-container">
+            <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3625.321305411649!2d89.76065507536412!3d24.5964839780996!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39fd97007952270b%3A0x91ffc94b497563ee!2z4Kaw4KeB4Kaq4Ka44Ka-IOCmnOCmqOCmleCmsuCnjeCmr-CmvuCmoCDgpqvgpvuCmm-CmqOCmoeCnh-Cmt-CmqA!5e0!3m2!1sbn!2sbd!4v1711375000000!5m2!1sbn!2sbd" 
+                allowfullscreen="" 
+                loading="lazy" 
+                referrerpolicy="no-referrer-when-downgrade">
+            </iframe>
+        </div>
+        
+        <a href="https://maps.app.goo.gl/J4WFANqyHS6pHtxv6" target="_blank" class="map-btn">
+            <i class="fas fa-directions"></i> গুগল ম্যাপে দেখুন
+        </a>
+    </div>
+</section>
+
+
+
+<section class="impact-section">
+    <div class="section-title">
+        <h2>আমাদের পথচলা</h2>
+        <div class="title-underline"></div>
+        <p>মানবসেবায় আমাদের অর্জন ও সফলতার এক নজরে চিত্র</p>
+    </div>
+
+    <div class="counter-container">
+        <div class="counter-card">
+            <div class="counter-icon"><i class="fas fa-users"></i></div>
+            <div class="counter-number" data-target="500">28</div>
+            <p>নিবন্ধিত সদস্য</p>
+        </div>
+
+        <div class="counter-card">
+            <div class="counter-icon"><i class="fas fa-hand-holding-heart"></i></div>
+            <div class="counter-number" data-target="1200">5</div>
+            <p>সাহায্যপ্রাপ্ত মানুষ</p>
+        </div>
+
+        <div class="counter-card">
+            <div class="counter-icon"><i class="fas fa-calendar-check"></i></div>
+            <div class="counter-number" data-target="45">5</div>
+            <p>সফল ইভেন্ট</p>
+        </div>
+
+        <div class="counter-card">
+            <div class="counter-icon"><i class="fas fa-award"></i></div>
+            <div class="counter-number" data-target="12">0</div>
+            <p>অর্জিত সম্মাননা</p>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="rating-display-card">
+    <h3><i class="fas fa-star"></i> ইউজার রিভিউ ও রেটিং</h3>
+    <div class="average-rating">
+        <span id="avgRating"></span>
+        <div class="stars-outer">
+            <div class="stars-inner" id="avgStars"></div>
+        </div>
+        <p>(<span id="totalReviews"></span> রিভিউ দিন)</p>
+    </div>
+    
+    <a href="feedback.html" target="_blank" class="feedback-btn">
+        <i class="fas fa-comment-dots"></i> আপনার মতামত দিন
+    </a>
+</div>
+
+<footer class="main-footer">
+    <div class="footer-container">
+        
+        <div class="footer-brand">
+            <a href="#" class="footer-logo">রুপসা জনকল্যাণ ফাউন্ডেশন </a>
+            <p>“সেবা হোক প্রত্যয়, জনকল্যাণ হোক জয়”
+আমাদের প্রতিটি উদ্যোগ মানুষের কল্যাণের জন্য নিবেদিত। আমরা বিশ্বাস করি—একটি ছোট সহায়তাও একটি বড় পরিবর্তনের সূচনা করতে পারে। আসুন, আমরা সবাই মিলে একটি মানবিক ও সুন্দর সমাজ গড়ে তুলি।</p>
+            <div class="social-links">
+                <a href="https://www.facebook.com/rjfoundation25"><i class="fab fa-facebook-f"></i></a>
+                <a href="https://youtube.com/channel/UCempOBWhLCDczEKN2j859Iw?si=k2G72kf3xPur96XT"><i class="fab fa-youtube"></i></a>
+                <a href="mailto:info.rjfoundation25@gmail.com">
+               <i class="fas fa-envelope"></i></a>
+                <a href="https://m.me/803315036207248"><i class="fab fa-facebook-messenger"></i></a>
+                <a href="https://wa.me/8801957329211?text=Assalamu%20Alaikum,%20ami%20apnader%20foundation%20niye%20jante%20chai%20?"><i class="fab fa-whatsapp"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-column">
+            <h3>মেনু</h3>
+            <ul class="footer-links">
+                <li><a href="about.html"><i class="fas fa-chevron-right"></i> আমাদের সম্পর্কে</a></li>
+                <li><a href="activities.html"><i class="fas fa-chevron-right"></i> কার্যক্রমসমূহ</a></li>
+                <li><a href="blog.html"><i class="fas fa-chevron-right"></i> ব্লগ</a></li>
+                <li><a href="gallery.html"><i class="fas fa-chevron-right"></i> গ্যালারি</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>যুক্ত হোন</h3>
+            <ul class="footer-links">
+                <li><a href="donor.html"><i class="fas fa-chevron-right"></i> নিয়মিত দাতা সদস্য</a></li>
+                <li><a href="volunteer.html"><i class="fas fa-chevron-right"></i> স্বেচ্ছাসেবক</a></li>
+                <li><a href="career.html"><i class="fas fa-chevron-right"></i> ক্যারিয়ার</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h3>অন্যান্য</h3>
+            <ul class="footer-links">
+                <li><a href="contact.html"><i class="fas fa-chevron-right"></i> যোগাযোগ</a></li>
+                <li><a href="terms.html"><i class="fas fa-chevron-right"></i> শর্তাবলী</a></li>
+                <li><a href="privacy.html"><i class="fas fa-chevron-right"></i> গোপনীয়তা নীতি</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>স্বত্ব &copy; 2026 <span id="year"></span> রূপসা জনকল্যাণ ফাউন্ডেশন - সর্ব স্বত্ব সংরক্ষিত।</p>
+    </div>
+</footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
