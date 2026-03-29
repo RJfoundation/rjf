@@ -100,16 +100,16 @@
 
     let currentUserData = null;
 
-    // --- ভেরিফিকেশন লজিক (আপডেটেড এরর হ্যান্ডলিং) ---
+      // --- ভেরিফিকেশন লজিক (সাইন-আপ বাটন সহ) ---
     function verifyUser() {
         const email = document.getElementById('emailInput').value;
         const btn = document.getElementById('vBtn');
         const msg = document.getElementById('statusMsg');
 
-        msg.innerText = ""; // আগের মেসেজ ক্লিয়ার করা
+        msg.innerHTML = ""; 
 
         if(!email) {
-            msg.innerText = "⚠️ দয়া করে একটি ইমেইল দিন!";
+            msg.innerHTML = "⚠️ দয়া করে একটি ইমেইল দিন!";
             msg.style.color = "red";
             return;
         }
@@ -117,10 +117,9 @@
         btn.disabled = true;
         btn.innerText = "চেক করা হচ্ছে...";
 
-        // লগইন প্রজেক্টে এই ইমেইলটি আছে কি না তা চেক করা
         auth.fetchSignInMethodsForEmail(email).then(methods => {
             if (methods.length > 0) {
-                msg.innerText = "✅ ভেরিফিকেশন সফল! ফর্ম লোড হচ্ছে...";
+                msg.innerHTML = "✅ ভেরিফিকেশন সফল! ফর্ম লোড হচ্ছে...";
                 msg.style.color = "green";
                 
                 setTimeout(() => {
@@ -142,26 +141,28 @@
                     `;
                 }, 1000);
             } else {
-                msg.innerHTML = "🚫 <b>দুঃখিত!</b> এই ইমেইলটি আমাদের সদস্য তালিকায় নেই।";
-                msg.style.color = "red";
+                // ইমেইল না পাওয়া গেলে সাইন আপ বাটন দেখানো হচ্ছে
+                msg.innerHTML = `
+                    <div style="background: #ffebee; padding: 10px; border-radius: 10px; border: 1px solid #ffcdd2; margin-top: 10px;">
+                        <p style="color: #d32f2f; margin-bottom: 8px;">🚫 এই ইমেইলটি আমাদের সদস্য তালিকায় নেই।</p>
+                        <a href="registration.html" style="display: inline-block; background: #00796b; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; font-size: 13px;">এখনই সাইন আপ করুন</a>
+                    </div>
+                `;
                 btn.disabled = false;
-                btn.innerText = "ভেরিফাই করুন";
+                btn.innerText = "আবার চেষ্টা করুন";
             }
         }).catch(err => {
-            // এরর মেসেজ উন্নত করা হয়েছে
             if (err.code === "auth/invalid-email") {
-                msg.innerText = "❌ ভুল ইমেইল ফরম্যাট! সঠিক ইমেইল দিন।";
-            } else if (err.code === "auth/network-request-failed") {
-                msg.innerText = "📡 ইন্টারনেট কানেকশন চেক করুন!";
+                msg.innerText = "❌ ভুল ইমেইল ফরম্যাট!";
             } else {
                 msg.innerText = "⚠️ সার্ভারে সমস্যা হয়েছে! আবার চেষ্টা করুন।";
             }
-            console.error(err);
             msg.style.color = "red";
             btn.disabled = false;
             btn.innerText = "ভেরিফাই করুন";
         });
     }
+
 
     function submitReview() {
         const text = document.getElementById('reviewText').value;
