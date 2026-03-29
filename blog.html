@@ -270,6 +270,41 @@
             .blog-grid { grid-template-columns: 1fr; }
             .modal-body { padding: 20px; }
         }
+
+         /* ভিডিও প্লেয়ার ডিজাইন */
+.video-container-main {
+    max-width: 1000px;
+    margin: -60px auto 40px; /* হেডার থেকে একটু ওপরে তুলে আনা হয়েছে */
+    padding: 0 20px;
+    position: relative;
+    z-index: 10;
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 রেশিও */
+    height: 0;
+    overflow: hidden;
+    border-radius: 25px;
+    background: #000;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    border: 5px solid var(--glass);
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: 2px;
+}
+
+@media (max-width: 768px) {
+    .video-container-main {
+        margin: -30px auto 30px;
+    }
+}
     </style>
 </head>
 <body>
@@ -289,6 +324,20 @@
             <div class="tab">জরুরি ত্রাণ</div>
         </div>
 
+        
+<div class="video-container-main">
+    <div class="video-wrapper">
+        <iframe 
+    src="https://www.youtube.com/embed/egD2biAoCNE?rel=0" 
+    title="রুপসা জনকল্যাণ ফাউন্ডেশন ইফতার মাহফিল"
+    frameborder="0" 
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+    referrerpolicy="strict-origin-when-cross-origin"
+    allowfullscreen>
+</iframe>
+<p>রূপসা জনকল্যাণ ফাউন্ডেশন এর পক্ষ থেকে ইফতার মাহফিল</p>
+    </div>
+</div>
         <div class="blog-grid">
             
             <article class="post-card">
