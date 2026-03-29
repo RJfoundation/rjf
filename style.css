@@ -806,6 +806,15 @@ body.dark-mode .feedback-btn {
 }
 
 /* রেজিষ্টেশন বাটন */
+/* বাটনটি মাঝখানে নেওয়ার জন্য এই অংশটুকু */
+.container {
+    display: flex;
+    justify-content: center; /* ডানে-বামে মাঝখানে */
+    align-items: center;     /* উপর-নিচে মাঝখানে */
+    height: 1vh;           /* পুরো স্ক্রিনের উচ্চতা অনুযায়ী */
+}
+
+/* তোমার দেওয়া আসল কোড (কোনো পরিবর্তন করা হয়নি) */
 .btn {
     position: relative;
     padding: 15px 40px;
@@ -846,7 +855,6 @@ body.dark-mode .feedback-btn {
     cursor: not-allowed;
     opacity: 0.8;
 }
-
 
 
 
