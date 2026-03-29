@@ -194,16 +194,17 @@ function startLoading() {
     const spinner = document.getElementById('spinner');
     const text = document.getElementById('btn-text');
 
-    // ১. লোডিং শুরু করা
-    btn.disabled = true; // বাটন লক করা
-    spinner.style.display = 'inline-block'; // স্পিনার দেখানো
-    text.innerText = 'প্রসেসিং হচ্ছে...'; // টেক্সট পরিবর্তন
+    // লোডিং শুরু
+    btn.disabled = true;
+    spinner.style.display = 'inline-block';
+    text.innerText = 'প্রসেসিং হচ্ছে...';
 
-    // ২. ২ সেকেন্ড অপেক্ষা করে তারপর পেজ পরিবর্তন
+    // ২ সেকেন্ড পর রেজিস্ট্রেশন পেজে নিয়ে যাবে
     setTimeout(() => {
-        window.location.href = "registration.html"; // তোমার ফাইলের নাম
-    }, 2000); 
+        window.location.href = "registration.html";
+    }, 2000);
 }
+
 
 
 
