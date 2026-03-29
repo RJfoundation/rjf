@@ -811,7 +811,7 @@ body.dark-mode .feedback-btn {
     display: flex;
     justify-content: center; /* ডানে-বামে মাঝখানে */
     align-items: center;     /* উপর-নিচে মাঝখানে */
-    height: 1vh;           /* পুরো স্ক্রিনের উচ্চতা অনুযায়ী */
+    height: 10vh;           /* পুরো স্ক্রিনের উচ্চতা অনুযায়ী */
 }
 
 /* তোমার দেওয়া আসল কোড (কোনো পরিবর্তন করা হয়নি) */
