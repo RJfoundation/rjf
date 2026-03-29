@@ -188,7 +188,22 @@ window.addEventListener('scroll', () => {
     }
 });
 
+//বাটন স্টাইল
+function startLoading() {
+    const btn = document.getElementById('regBtn');
+    const spinner = document.getElementById('spinner');
+    const text = document.getElementById('btn-text');
 
+    // ১. লোডিং শুরু করা
+    btn.disabled = true; // বাটন লক করা
+    spinner.style.display = 'inline-block'; // স্পিনার দেখানো
+    text.innerText = 'প্রসেসিং হচ্ছে...'; // টেক্সট পরিবর্তন
+
+    // ২. ২ সেকেন্ড অপেক্ষা করে তারপর পেজ পরিবর্তন
+    setTimeout(() => {
+        window.location.href = "registration.html"; // তোমার ফাইলের নাম
+    }, 2000); 
+}
 
 
 
