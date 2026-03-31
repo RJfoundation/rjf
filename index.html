@@ -352,6 +352,7 @@
     <i class="fas fa-comment-dots"></i> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </div>
+
 <div id="chat-box" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 325px; height: 480px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); flex-direction: column; z-index: 1000; overflow: hidden; border: 1px solid rgba(0,121,107,0.2);">
     
     <div style="background: linear-gradient(135deg, #00796b, #004d40); color: white; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
@@ -382,6 +383,9 @@
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
+    // নোটিফিকেশন সাউন্ডের জন্য অডিও অবজেক্ট (কোনো ফাংশন পরিবর্তন না করে শুধু এটি অ্যাড করা হয়েছে)
+    const chatNotification = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
+
     // তোর প্রজেক্টের অরিজিনাল কনফিগ (কোনো কিছু চেঞ্জ করা হয়নি)
     const firebaseConfig = {
         apiKey: "AIzaSyAd0K18nLhmDsljRZuk4wvn9wPtHyuc7cM",
@@ -391,10 +395,9 @@
         messagingSenderId: "464542067879",
         appId: "1:464542067879:web:7c47353045bf5c7362bf82",
         measurementId: "G-YJCGJPV1RJ",
-        databaseURL: "https://rj-chats1-default-rtdb.firebaseio.com/" // তোর রিয়েল ডাটাবেস ইউআরএল
+        databaseURL: "https://rj-chats1-default-rtdb.firebaseio.com/" 
     };
 
-    // Firebase ইনিশিয়ালাইজেশন
     if (!firebase.apps.length) {
         firebase.initializeApp(firebaseConfig);
     }
@@ -402,9 +405,6 @@
     
     let userRoomID = "";
 
-    // বাকি সব ফাংশন (toggleChat, startSecureChat, sendPrivateMessage, loadPrivateMessages) 
-    // তুই যেভাবে লিখেছিস হুবহু সেভাবেই কাজ করবে।
-    
     function toggleChat() {
         const box = document.getElementById('chat-box');
         box.style.display = box.style.display === 'none' ? 'flex' : 'none';
@@ -412,7 +412,7 @@
 
     function startSecureChat() {
         const emailInput = document.getElementById('chat-email');
-        const email = emailInput.value.trim().toLowerCase(); // সিকিউরিটির জন্য লোয়ারকেস
+        const email = emailInput.value.trim().toLowerCase();
         
         if(email && email.includes("@")) {
             userRoomID = email.replace(/\./g, ',');
@@ -421,7 +421,6 @@
             document.getElementById('msg-section').style.display = 'block';
             document.getElementById('welcome-msg').style.display = 'none';
             
-            // ফ্রেশ স্টার্ট করার জন্য মেসেজ বক্স ক্লিয়ার
             document.getElementById('messages').innerHTML = "";
             
             loadPrivateMessages();
@@ -445,7 +444,6 @@
     }
 
     function loadPrivateMessages() {
-        // ডুপ্লিকেট মেসেজ ঠেকাতে আগের লিসেনার অফ করা
         db.ref("private_chats/" + userRoomID).off();
         
         db.ref("private_chats/" + userRoomID).on("child_added", (snapshot) => {
@@ -453,6 +451,11 @@
             const msgDiv = document.getElementById('messages');
             
             const isMe = data.sender === "user";
+
+            // অ্যাডমিন বা অন্য পক্ষ থেকে মেসেজ আসলে সাউন্ড বাজবে
+            if (!isMe) {
+                chatNotification.play().catch(e => console.log("Sound muted by browser policies"));
+            }
 
             const msgHtml = `
                 <div style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; 
@@ -470,6 +473,7 @@
         });
     }
 </script>
+
 
 
 
