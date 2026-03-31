@@ -345,7 +345,131 @@
 </script>
 
 
+    
 
+
+<div id="chat-icon" onclick="toggleChat()" style="position: fixed; bottom: 80px; right: 15px; background: #00796b; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000;">
+    <i class="fas fa-comment-dots"></i> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</div>
+<div id="chat-box" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 325px; height: 480px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); flex-direction: column; z-index: 1000; overflow: hidden; border: 1px solid rgba(0,121,107,0.2);">
+    
+    <div style="background: linear-gradient(135deg, #00796b, #004d40); color: white; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: bold;"><i class="fas fa-user-shield"></i> প্রাইভেট সাপোর্ট</span>
+        <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer; opacity: 0.8;"></i>
+    </div>
+
+    <div id="messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa;">
+        <p id="welcome-msg" style="text-align: center; color: #888; font-size: 13px; margin-top: 50px;">আপনার ইমেইল ভেরিফাই করে নিরাপদ চ্যাট শুরু করুন।</p>
+    </div>
+
+    <div id="chat-controls" style="padding: 15px; background: white; border-top: 1px solid #eee;">
+        <div id="auth-section">
+            <input type="email" id="chat-email" placeholder="ইমেইল অ্যাড্রেস..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
+            <button onclick="startSecureChat()" style="width: 100%; background: #00796b; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;">ভেরিফাই করুন</button>
+        </div>
+
+        <div id="msg-section" style="display: none;">
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="user-msg" placeholder="আপনার সমস্যা লিখুন..." style="flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none;">
+                <button onclick="sendPrivateMessage()" style="background: #00796b; color: white; padding: 12px 18px; border: none; border-radius: 12px; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+<script>
+    // তোর প্রজেক্টের অরিজিনাল কনফিগ (কোনো কিছু চেঞ্জ করা হয়নি)
+    const firebaseConfig = {
+        apiKey: "AIzaSyAd0K18nLhmDsljRZuk4wvn9wPtHyuc7cM",
+        authDomain: "rj-chats1.firebaseapp.com",
+        projectId: "rj-chats1",
+        storageBucket: "rj-chats1.firebasestorage.app",
+        messagingSenderId: "464542067879",
+        appId: "1:464542067879:web:7c47353045bf5c7362bf82",
+        measurementId: "G-YJCGJPV1RJ",
+        databaseURL: "https://rj-chats1-default-rtdb.firebaseio.com/" // তোর রিয়েল ডাটাবেস ইউআরএল
+    };
+
+    // Firebase ইনিশিয়ালাইজেশন
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+    
+    let userRoomID = "";
+
+    // বাকি সব ফাংশন (toggleChat, startSecureChat, sendPrivateMessage, loadPrivateMessages) 
+    // তুই যেভাবে লিখেছিস হুবহু সেভাবেই কাজ করবে।
+    
+    function toggleChat() {
+        const box = document.getElementById('chat-box');
+        box.style.display = box.style.display === 'none' ? 'flex' : 'none';
+    }
+
+    function startSecureChat() {
+        const emailInput = document.getElementById('chat-email');
+        const email = emailInput.value.trim().toLowerCase(); // সিকিউরিটির জন্য লোয়ারকেস
+        
+        if(email && email.includes("@")) {
+            userRoomID = email.replace(/\./g, ',');
+            
+            document.getElementById('auth-section').style.display = 'none';
+            document.getElementById('msg-section').style.display = 'block';
+            document.getElementById('welcome-msg').style.display = 'none';
+            
+            // ফ্রেশ স্টার্ট করার জন্য মেসেজ বক্স ক্লিয়ার
+            document.getElementById('messages').innerHTML = "";
+            
+            loadPrivateMessages();
+        } else {
+            alert("দয়া করে সঠিক ইমেইল দিন!");
+        }
+    }
+
+    function sendPrivateMessage() {
+        const msgInput = document.getElementById('user-msg');
+        const message = msgInput.value.trim();
+        
+        if(message !== "" && userRoomID !== "") {
+            db.ref("private_chats/" + userRoomID).push({
+                sender: "user",
+                text: message,
+                timestamp: firebase.database.ServerValue.TIMESTAMP
+            });
+            msgInput.value = "";
+        }
+    }
+
+    function loadPrivateMessages() {
+        // ডুপ্লিকেট মেসেজ ঠেকাতে আগের লিসেনার অফ করা
+        db.ref("private_chats/" + userRoomID).off();
+        
+        db.ref("private_chats/" + userRoomID).on("child_added", (snapshot) => {
+            const data = snapshot.val();
+            const msgDiv = document.getElementById('messages');
+            
+            const isMe = data.sender === "user";
+
+            const msgHtml = `
+                <div style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; 
+                            background: ${isMe ? '#00796b' : '#ffffff'}; 
+                            color: ${isMe ? '#fff' : '#333'}; 
+                            padding: 10px 15px; border-radius: 18px; 
+                            max-width: 80%; font-size: 14px; 
+                            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+                            border: ${isMe ? 'none' : '1px solid #ddd'};">
+                    ${data.text}
+                </div>
+            `;
+            msgDiv.innerHTML += msgHtml;
+            msgDiv.scrollTop = msgDiv.scrollHeight;
+        });
+    }
+</script>
 
 
 
