@@ -361,14 +361,35 @@
     </div>
 
     <div id="messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa;">
-        <p id="welcome-msg" style="text-align: center; color: #888; font-size: 13px; margin-top: 50px;">আপনার ইমেইল ভেরিফাই করে নিরাপদ চ্যাট শুরু করুন।</p>
+        <p id="welcome-msg" style="text-align: center; color: #888; font-size: 13px; margin-top: 50px;">নিরাপদ চ্যাট শুরু করতে লগইন করুন।</p>
     </div>
 
     <div id="chat-controls" style="padding: 15px; background: white; border-top: 1px solid #eee;">
-        <div id="auth-section">
-            <input type="email" id="chat-email" placeholder="ইমেইল অ্যাড্রেস..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
-            <button onclick="startSecureChat()" style="width: 100%; background: #00796b; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;">ভেরিফাই করুন</button>
+        
+        <div id="login-section">
+            <input type="email" id="login-email" placeholder="ইমেইল..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
+            <input type="password" id="login-pass" placeholder="পাসওয়ার্ড..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
+            <button onclick="handleLogin()" style="width: 100%; background: #00796b; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">লগইন করুন</button>
+            <p style="font-size: 12px; text-align: center;">নতুন ইউজার? <span onclick="showRegister()" style="color: #00796b; cursor: pointer; font-weight: bold;">রেজিস্ট্রেশন করুন</span></p>
+            <p onclick="showResetSection()" style="font-size: 11px; text-align: center; color: #888; cursor: pointer; margin-top: 5px;">পাসওয়ার্ড ভুলে গেছেন?</p>
         </div>
+
+        <div id="reg-section" style="display: none;">
+            <input type="text" id="reg-name" placeholder="আপনার নাম..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
+            <input type="email" id="reg-email" placeholder="ইমেইল..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
+            <input type="password" id="reg-pass" placeholder="পাসওয়ার্ড..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
+            <button onclick="handleRegister()" style="width: 100%; background: #004d40; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">অ্যাকাউন্ট খুলুন</button>
+            <p style="font-size: 12px; text-align: center;">ইতিমধ্যে অ্যাকাউন্ট আছে? <span onclick="showLogin()" style="color: #00796b; cursor: pointer; font-weight: bold;">লগইন করুন</span></p>
+        </div>
+
+        <div id="reset-section" style="display: none;">
+            <p style="font-size: 12px; color: #555; text-align: center; margin-bottom: 10px;">আপনার ইমেইল দিন, আমরা রিসেট লিংক পাঠাবো।</p>
+            <input type="email" id="reset-email" placeholder="ইমেইল অ্যাড্রেস..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
+            <button onclick="handleReset()" style="width: 100%; background: #455a64; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">লিংক পাঠান</button>
+            <p onclick="showLogin()" style="font-size: 12px; text-align: center; color: #00796b; cursor: pointer; font-weight: bold;">লগইন পেজে ফিরুন</p>
+        </div>
+
+        <p id="chat-error" style="color: #d32f2f; font-size: 12px; text-align: center; margin-bottom: 10px; display: none; font-weight: 500;"></p>
 
         <div id="msg-section" style="display: none;">
             <div style="display: flex; gap: 8px;">
@@ -381,12 +402,9 @@
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 
 <script>
-    // নোটিফিকেশন সাউন্ডের জন্য অডিও অবজেক্ট (কোনো ফাংশন পরিবর্তন না করে শুধু এটি অ্যাড করা হয়েছে)
-    const chatNotification = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-
-    // তোর প্রজেক্টের অরিজিনাল কনফিগ (কোনো কিছু চেঞ্জ করা হয়নি)
     const firebaseConfig = {
         apiKey: "AIzaSyAd0K18nLhmDsljRZuk4wvn9wPtHyuc7cM",
         authDomain: "rj-chats1.firebaseapp.com",
@@ -402,31 +420,107 @@
         firebase.initializeApp(firebaseConfig);
     }
     const db = firebase.database();
+    const auth = firebase.auth();
     
     let userRoomID = "";
+    let currentUserName = "";
 
     function toggleChat() {
         const box = document.getElementById('chat-box');
         box.style.display = box.style.display === 'none' ? 'flex' : 'none';
     }
 
-    function startSecureChat() {
-        const emailInput = document.getElementById('chat-email');
-        const email = emailInput.value.trim().toLowerCase();
-        
-        if(email && email.includes("@")) {
-            userRoomID = email.replace(/\./g, ',');
-            
-            document.getElementById('auth-section').style.display = 'none';
-            document.getElementById('msg-section').style.display = 'block';
-            document.getElementById('welcome-msg').style.display = 'none';
-            
-            document.getElementById('messages').innerHTML = "";
-            
-            loadPrivateMessages();
+    function showStatus(msg, color = "#d32f2f") {
+        const errorEl = document.getElementById('chat-error');
+        errorEl.innerText = msg;
+        errorEl.style.color = color;
+        errorEl.style.display = 'block';
+        setTimeout(() => { errorEl.style.display = 'none'; }, 4000);
+    }
+
+    function showRegister() {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('reset-section').style.display = 'none';
+        document.getElementById('reg-section').style.display = 'block';
+    }
+
+    function showLogin() {
+        document.getElementById('reg-section').style.display = 'none';
+        document.getElementById('reset-section').style.display = 'none';
+        document.getElementById('login-section').style.display = 'block';
+    }
+
+    function showResetSection() {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('reg-section').style.display = 'none';
+        document.getElementById('reset-section').style.display = 'block';
+    }
+
+    function handleRegister() {
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim();
+        const pass = document.getElementById('reg-pass').value.trim();
+
+        if(name && email && pass.length >= 6) {
+            auth.createUserWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    return userCredential.user.updateProfile({ displayName: name });
+                })
+                .then(() => {
+                    showStatus("রেজিস্ট্রেশন সফল! এখন লগইন করুন।", "#00796b");
+                    setTimeout(showLogin, 2000);
+                })
+                .catch((error) => showStatus("ভুল: " + error.message));
         } else {
-            alert("দয়া করে সঠিক ইমেইল দিন!");
+            showStatus("সঠিক তথ্য দিন (পাসওয়ার্ড কমপক্ষে ৬ অক্ষর)");
         }
+    }
+
+    function handleLogin() {
+        const email = document.getElementById('login-email').value.trim();
+        const pass = document.getElementById('login-pass').value.trim();
+
+        if(email && pass) {
+            auth.signInWithEmailAndPassword(email, pass)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    currentUserName = user.displayName || "User";
+                    userRoomID = user.email.replace(/\./g, ',');
+                    
+                    document.getElementById('login-section').style.display = 'none';
+                    document.getElementById('reg-section').style.display = 'none';
+                    document.getElementById('reset-section').style.display = 'none';
+                    document.getElementById('msg-section').style.display = 'block';
+                    document.getElementById('welcome-msg').style.display = 'none';
+                    document.getElementById('messages').innerHTML = "";
+                    
+                    loadPrivateMessages();
+                })
+                .catch((error) => showStatus("ইমেইল বা পাসওয়ার্ড ভুল!"));
+        } else {
+            showStatus("ইমেইল এবং পাসওয়ার্ড দিন!");
+        }
+    }
+
+    function handleReset() {
+        const email = document.getElementById('reset-email').value.trim();
+        if(email && email.includes("@")) {
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    showStatus("রিসেট লিংক ইমেইলে পাঠানো হয়েছে।", "#00796b");
+                    setTimeout(showLogin, 3000);
+                })
+                .catch((error) => showStatus("এই ইমেইলটি খুঁজে পাওয়া যায়নি!"));
+        } else {
+            showStatus("দয়া করে সঠিক ইমেইলটি লিখুন।");
+        }
+    }
+
+    function sendToTelegram(name, email, message) {
+        const token = "8619051804:AAHG77QU26209xHaXW9c5scVLOdX4q97-R4";
+        const chatId = "8197731054"; 
+        const text = `🔔 নতুন মেসেজ!\n👤 নাম: ${name}\n📧 ইমেইল: ${email}\n💬 মেসেজ: ${message}`;
+        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`);
     }
 
     function sendPrivateMessage() {
@@ -436,26 +530,23 @@
         if(message !== "" && userRoomID !== "") {
             db.ref("private_chats/" + userRoomID).push({
                 sender: "user",
+                userName: currentUserName,
                 text: message,
                 timestamp: firebase.database.ServerValue.TIMESTAMP
             });
+
+            const userEmail = userRoomID.replace(/,/g, '.');
+            sendToTelegram(currentUserName, userEmail, message);
             msgInput.value = "";
         }
     }
 
     function loadPrivateMessages() {
         db.ref("private_chats/" + userRoomID).off();
-        
         db.ref("private_chats/" + userRoomID).on("child_added", (snapshot) => {
             const data = snapshot.val();
             const msgDiv = document.getElementById('messages');
-            
             const isMe = data.sender === "user";
-
-            // অ্যাডমিন বা অন্য পক্ষ থেকে মেসেজ আসলে সাউন্ড বাজবে
-            if (!isMe) {
-                chatNotification.play().catch(e => console.log("Sound muted by browser policies"));
-            }
 
             const msgHtml = `
                 <div style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; 
@@ -473,6 +564,9 @@
         });
     }
 </script>
+
+
+
 
 
 
