@@ -396,6 +396,7 @@
     </div>
 </div>
 
+    
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
@@ -538,27 +539,36 @@
     }
 
     function loadPrivateMessages() {
-        db.ref("private_chats/" + userRoomID).off();
-        db.ref("private_chats/" + userRoomID).on("child_added", (snapshot) => {
-            const data = snapshot.val();
-            const msgDiv = document.getElementById('messages');
-            const isMe = data.sender === "user";
+    db.ref("private_chats/" + userRoomID).off();
+    db.ref("private_chats/" + userRoomID).on("child_added", (snapshot) => {
+        const data = snapshot.val();
+        const msgDiv = document.getElementById('messages');
+        const isMe = data.sender === "user";
 
-            const msgHtml = `
-                <div style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; 
-                            background: ${isMe ? '#00796b' : '#ffffff'}; 
-                            color: ${isMe ? '#fff' : '#333'}; 
-                            padding: 10px 15px; border-radius: 18px; 
-                            max-width: 80%; font-size: 14px; 
-                            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-                            border: ${isMe ? 'none' : '1px solid #ddd'};">
-                    ${data.text}
-                </div>
-            `;
-            msgDiv.innerHTML += msgHtml;
-            msgDiv.scrollTop = msgDiv.scrollHeight;
-        });
-    }
+        const msgHtml = `
+            <div style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; 
+                        background: ${isMe ? '#00796b' : '#ffffff'}; 
+                        color: ${isMe ? '#fff' : '#333'}; 
+                        padding: 10px 15px; border-radius: 18px; 
+                        max-width: 80%; font-size: 14px; 
+                        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+                        border: ${isMe ? 'none' : '1px solid #ddd'};">
+                ${data.text}
+            </div>
+        `;
+        msgDiv.innerHTML += msgHtml;
+        msgDiv.scrollTop = msgDiv.scrollHeight;
+
+        // সাউন্ড প্লে করার অংশ (শুধুমাত্র অন্যের মেসেজ বা সব মেসেজের জন্য)
+        // যদি চান শুধু সাপোর্ট টিম রিপ্লাই দিলে সাউন্ড হবে, তবে !isMe কন্ডিশন রাখুন
+        if (!isMe) { 
+            const sound = document.getElementById('message-sound');
+            sound.play().catch(error => {
+                console.log("সাউন্ড প্লে হতে বাধা পেয়েছে (ব্রাউজার পলিসি):", error);
+            });
+        }
+    });
+}
 </script>
 
 
