@@ -352,12 +352,12 @@
 <div id="chat-box" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 325px; height: 480px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); flex-direction: column; z-index: 1000; overflow: hidden; border: 1px solid rgba(0,121,107,0.2);">
     
     <div style="background: linear-gradient(135deg, #00796b, #004d40); color: white; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-weight: bold;"><i class="fas fa-user-shield"></i> প্রাইভেট সাপোর্ট</span>
+        <span style="font-weight: bold;"><i class="fas fa-user-shield"></i> RJF প্রাইভেট সাপোর্ট</span>
         <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer; opacity: 0.8;"></i>
     </div>
 
     <div id="messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa;">
-        <p id="welcome-msg" style="text-align: center; color: #888; font-size: 13px; margin-top: 50px;">নিরাপদ চ্যাট শুরু করতে লগইন করুন।</p>
+        <p id="welcome-msg" style="text-align: center; color: #888; font-size: 13px; margin-top: 50px;">নিরাপদ চ্যাট শুরু করুন আমাদের নিজস্ব মেসেঞ্জারে, তাই লগইন করুন।</p>
     </div>
 
     <div id="chat-controls" style="padding: 15px; background: white; border-top: 1px solid #eee;">
@@ -379,10 +379,10 @@
         </div>
 
         <div id="reset-section" style="display: none;">
-            <p style="font-size: 12px; color: #555; text-align: center; margin-bottom: 10px;">আপনার ইমেইল দিন, আমরা রিসেট লিংক পাঠাবো।</p>
+            <p style="font-size: 12px; color: #555; text-align: center; margin-bottom: 10px;">আপনার ইমেইল দিন অ্যাড্রেস দিন।</p>
             <input type="email" id="reset-email" placeholder="ইমেইল অ্যাড্রেস..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
             <button onclick="handleReset()" style="width: 100%; background: #455a64; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">লিংক পাঠান</button>
-            <p onclick="showLogin()" style="font-size: 12px; text-align: center; color: #00796b; cursor: pointer; font-weight: bold;">লগইন পেজে ফিরুন</p>
+            <p onclick="showLogin()" style="font-size: 12px; text-align: center; color: #00796b; cursor: pointer; font-weight: bold;">লগইনে ফিরে যান</p>
         </div>
 
         <p id="chat-error" style="color: #d32f2f; font-size: 12px; text-align: center; margin-bottom: 10px; display: none; font-weight: 500;"></p>
