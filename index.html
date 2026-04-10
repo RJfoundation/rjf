@@ -425,9 +425,17 @@
     let userRoomID = "";
     let currentUserName = "";
 
+    // ব্রাউজার নোটিফিকেশন পারমিশন চাওয়া
+    if (Notification.permission !== "granted") {
+        Notification.requestPermission();
+    }
+
     function toggleChat() {
         const box = document.getElementById('chat-box');
         box.style.display = box.style.display === 'none' ? 'flex' : 'none';
+        if (box.style.display === 'flex') {
+            document.title = "RJF Private Support";
+        }
     }
 
     function showStatus(msg, color = "#d32f2f") {
@@ -504,9 +512,23 @@
 
     function handleReset() {
         const email = document.getElementById('reset-email').value.trim();
+        const lastResetKey = "last_reset_" + email.replace(/\./g, '_');
+        const lastResetTime = localStorage.getItem(lastResetKey);
+        const currentTime = Date.now();
+        const waitTime = 10 * 60 * 1000;
+
         if(email && email.includes("@")) {
+            if (lastResetTime && (currentTime - lastResetTime < waitTime)) {
+                const timeLeft = waitTime - (currentTime - lastResetTime);
+                const minutes = Math.floor(timeLeft / 60000);
+                const seconds = Math.floor((timeLeft % 60000) / 1000);
+                showStatus(`আপনি ${minutes} মিনিট ${seconds} সেকেন্ড পর পুনরায় চেষ্টা করতে পারবেন।`, "#d32f2f");
+                return;
+            }
+
             auth.sendPasswordResetEmail(email)
                 .then(() => {
+                    localStorage.setItem(lastResetKey, currentTime);
                     showStatus("রিসেট লিংক ইমেইলে পাঠানো হয়েছে।", "#00796b");
                     setTimeout(showLogin, 3000);
                 })
@@ -562,9 +584,18 @@
         msgDiv.innerHTML += msgHtml;
         msgDiv.scrollTop = msgDiv.scrollHeight;
 
-        // সাউন্ড প্লে করার অংশ (শুধুমাত্র অন্যের মেসেজ বা সব মেসেজের জন্য)
-        // যদি চান শুধু সাপোর্ট টিম রিপ্লাই দিলে সাউন্ড হবে, তবে !isMe কন্ডিশন রাখুন
         if (!isMe) { 
+            // ট্যাব টাইটেল পরিবর্তন
+            document.title = "🔔 নতুন মেসেজ এসেছে!";
+            
+            // ব্রাউজার পপ-আপ নোটিফিকেশন
+            if (Notification.permission === "granted") {
+                new Notification("RJF Support", { 
+                    body: "আপনি একটি নতুন মেসেজ পেয়েছেন: " + data.text,
+                    icon: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
+                });
+            }
+
             const sound = document.getElementById('message-sound');
             sound.play().catch(error => {
                 console.log("সাউন্ড প্লে হতে বাধা পেয়েছে (ব্রাউজার পলিসি):", error);
@@ -573,6 +604,7 @@
     });
 }
 </script>
+
 
 
 
