@@ -166,7 +166,7 @@
                     </div>
                 `;
                 btn.disabled = false;
-                btn.innerText = " দুঃখিত ! অনুগ্রহ করে আবার চেষ্টা করুন";
+                btn.innerText = " দুঃখিত!";
             }
         }).catch(err => {
             msg.innerText = "⚠️ আপনার ইমেইল টি সঠিক নয়!";
@@ -179,7 +179,7 @@
         const text = document.getElementById('reviewText').value;
 
         if(!text) {
-            alert("দয়া আপনার রিভিউ দিন!");
+            alert("দয়া করে আপনার রিভিউ লিখুন!");
             return;
         }
 
