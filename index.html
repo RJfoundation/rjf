@@ -578,36 +578,70 @@
 
 
 
+
+
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600;900&display=swap');
+
     .visitor-card-premium {
-        background: rgba(255, 255, 255, 0.05);
+        background: rgba(0, 230, 118, 0.3);
         backdrop-filter: blur(20px);
         -webkit-backdrop-filter: blur(20px);
         border: 1px solid rgba(255, 255, 255, 0.1);
         border-radius: 25px;
-        padding: 35px;
+        padding: 10px;
         text-align: center;
-        max-width: 380px;
+        max-width: 400px;
         margin: 40px auto;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.3);
-        color: green;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        color: #00e676;
         font-family: 'Poppins', sans-serif;
     }
 
     .stat-label {
-        font-size: 13px;
+        font-size: 14px;
         text-transform: uppercase;
         letter-spacing: 2px;
         color: #00e676;
-        margin-bottom: 5px;
+        margin-bottom: 20px;
         font-weight: 600;
     }
 
-    .count-number {
-        font-size: 3.8rem;
+    /* কাউন্টার বক্সের ডিজাইন */
+    .counter-wrapper {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        margin: 6px 0;
+        flex-wrap: wrap;
+    }
+
+    .digit-box {
+        background: linear-gradient(145deg, black, black);
+        border: 1px solid rgba(0, 230, 118, 0.3);
+        border-radius: 10px;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
         font-weight: 900;
-        margin: 10px 0;
-        text-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        color: #00e676;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        overflow: hidden; /* স্লাইডিং ইফেক্টের জন্য জরুরি */
+        position: relative;
+    }
+
+    /* স্লাইডিং অ্যানিমেশন */
+    .digit-anim {
+        display: inline-block;
+        animation: slideUpDigit 4s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+
+    @keyframes slideUpDigit {
+        0% { transform: translateY(100%); opacity: 0; }
+        100% { transform: translateY(0); opacity: 1; }
     }
 
     .country-container {
@@ -615,15 +649,16 @@
         flex-wrap: wrap;
         justify-content: center;
         gap: 10px;
-        margin-top: 20px;
-        max-height: 150px;
+        margin-top: 10px;
+        max-height: 100px;
         overflow-y: auto;
         padding: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .country-chip {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
         padding: 6px 15px;
         border-radius: 50px;
         font-size: 11px;
@@ -631,6 +666,7 @@
         align-items: center;
         gap: 5px;
         transition: 0.3s;
+        color: #eee;
     }
 
     .country-chip:hover {
@@ -640,12 +676,18 @@
 </style>
 
 <div class="visitor-card-premium">
-    <div class="stat-label">আমাদের ওয়েবসাইটে ভিজিটর সংখ্যা</div>
-    <div id="display-count" class="count-number">0</div>
+    <strong>আমাদের ওয়েবসাইটে ভিজিটর</strong>
+    <div id="counter-display" class="counter-wrapper">
+        <div class="digit-box">0</div>
+    </div>
+
     <div class="country-container" id="display-countries">
         <span style="opacity: 0.5; font-size: 12px;">এনালাইজিং ডাটা...</span>
     </div>
 </div>
+
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 
 <script>
     const newProjectConfig = {
@@ -658,7 +700,6 @@
         appId: "1:936802340652:web:9283ff8a9ffcbee6686689"
     };
 
-    // ২. আলাদা অ্যাপ হিসেবে সুন্দরভাবে ইনিশিয়ালাইজ করা
     var analyticsApp;
     try {
         analyticsApp = firebase.initializeApp(newProjectConfig, "analyticsApp");
@@ -667,46 +708,74 @@
     }
     const analyticsDb = analyticsApp.database();
 
-    function countUp(target) {
-        let current = 0;
-        const display = document.getElementById('display-count');
-        const duration = 2000;
-        const step = Math.ceil(target / 100) || 1;
+    let lastCount = -1;
 
-        const timer = setInterval(() => {
-            current += step;
-            if (current >= target) {
-                display.innerText = target;
-                clearInterval(timer);
-            } else {
-                display.innerText = current;
+    // সংখ্যাকে আলাদা আলাদা বক্সে দেখানোর এবং এনিমেট করার ফাংশন
+    function updateCounter(number) {
+        if (number === lastCount) return;
+        
+        const display = document.getElementById('counter-display');
+        const digits = number.toString().split('');
+        const prevDigits = lastCount.toString().split('');
+        
+        display.innerHTML = '';
+        
+        digits.forEach((digit, i) => {
+            const box = document.createElement('div');
+            box.className = 'digit-box';
+            
+            const span = document.createElement('span');
+            span.innerText = digit;
+            
+            // যদি নতুন ভিজিটর হয় বা প্রথমবার লোড হয়, তবে অ্যানিমেশন ক্লাস যোগ হবে
+            if (lastCount === -1 || digit !== prevDigits[i]) {
+                span.className = 'digit-anim';
             }
-        }, 20);
+            
+            box.appendChild(span);
+            display.appendChild(box);
+        });
+        
+        lastCount = number;
     }
 
     async function runAnalytics() {
-        // ১. আগে ভিউ বাড়িয়ে নাও (লোকেশন এরর হলেও যেন ভিউ কাউন্ট হয়)
         const statsRef = analyticsDb.ref('web_stats');
         
-        // সেম সেশনে বারবার ভিউ না বাড়াতে চাইলে এই কন্ডিশন
         if (!sessionStorage.getItem('rjf_viewed')) {
             statsRef.child('total_views').transaction(n => (n || 0) + 1);
             sessionStorage.setItem('rjf_viewed', 'true');
         }
 
-        // ২. আইপি থেকে দেশ খোঁজা (এটা অপশনাল রাখলাম যাতে কোড না আটকে যায়)
         try {
             const res = await fetch('https://ipapi.co/json/');
             const geo = await res.json();
             const country = geo.country_name || "Unknown";
             statsRef.child('locations/' + country.replace(/\./g, '_')).transaction(n => (n || 0) + 1);
-        } catch(e) { console.log("Location fetch failed, but views will still count."); }
+        } catch(e) { console.log("Location fetch failed."); }
 
-        // ৩. রিয়েল টাইম লিসেনার
         statsRef.on('value', (snap) => {
             const data = snap.val();
             if(data) {
-                countUp(data.total_views || 0);
+                const total = data.total_views || 0;
+                
+                // প্রথম লোডের সময় ১ থেকে শুরু হয়ে বর্তমান সংখ্যা পর্যন্ত একটা ইফেক্ট দেওয়ার জন্য
+                if(lastCount === -1) {
+                    let start = 0;
+                    let step = Math.ceil(total / 20); // দ্রুত কাউন্ট হওয়ার জন্য
+                    let timer = setInterval(() => {
+                        start += step;
+                        if(start >= total) {
+                            clearInterval(timer);
+                            updateCounter(total);
+                        } else {
+                            updateCounter(start);
+                        }
+                    }, 50);
+                } else {
+                    updateCounter(total);
+                }
+
                 let html = "";
                 for(let loc in data.locations) {
                     html += `<div class="country-chip">🌍 ${loc}: ${data.locations[loc]}</div>`;
@@ -718,7 +787,6 @@
 
     runAnalytics();
 </script>
-
 
 
     
