@@ -353,7 +353,10 @@
     
     <div style="background: linear-gradient(135deg, #00796b, #004d40); color: white; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
         <span style="font-weight: bold;"><i class="fas fa-user-shield"></i> RJF প্রাইভেট সাপোর্ট</span>
-        <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer; opacity: 0.8;"></i>
+        <div style="display: flex; gap: 15px; align-items: center;">
+            <i class="fas fa-trash-alt" id="delete-btn" onclick="clearUserChat()" style="cursor: pointer; opacity: 0.8; font-size: 16px; display: none;" title="সব মেসেজ মুছুন"></i>
+            <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer; opacity: 0.8;"></i>
+        </div>
     </div>
 
     <div id="messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa;">
@@ -456,6 +459,7 @@
         document.getElementById('reg-section').style.display = 'none';
         document.getElementById('reset-section').style.display = 'none';
         document.getElementById('login-section').style.display = 'block';
+        document.getElementById('delete-btn').style.display = 'none'; // লগ আউট অবস্থায় লুকানো
     }
 
     function showResetSection() {
@@ -500,6 +504,7 @@
                     document.getElementById('reset-section').style.display = 'none';
                     document.getElementById('msg-section').style.display = 'block';
                     document.getElementById('welcome-msg').style.display = 'none';
+                    document.getElementById('delete-btn').style.display = 'inline-block'; // ডিলিট বাটন দেখানো
                     document.getElementById('messages').innerHTML = "";
                     
                     loadPrivateMessages();
@@ -563,6 +568,22 @@
         }
     }
 
+    // মেসেজ ডিলিট করার ফাংশন
+    function clearUserChat() {
+        if(userRoomID !== "") {
+            if(confirm("আপনি কি আপনার সব মেসেজ ডিলিট করতে চান? এটি ডাটাবেস থেকে স্থায়ীভাবে মুছে যাবে।")) {
+                db.ref("private_chats/" + userRoomID).remove()
+                .then(() => {
+                    document.getElementById('messages').innerHTML = "";
+                    showStatus("আপনার সব মেসেজ মুছে ফেলা হয়েছে!", "#00796b");
+                })
+                .catch((error) => {
+                    showStatus("মুছে ফেলতে ব্যর্থ: " + error.message);
+                });
+            }
+        }
+    }
+
     function loadPrivateMessages() {
     db.ref("private_chats/" + userRoomID).off();
     db.ref("private_chats/" + userRoomID).on("child_added", (snapshot) => {
@@ -602,8 +623,16 @@
             });
         }
     });
+
+    // ডাটা ডিলিট হলে স্ক্রিন ক্লিয়ার করার জন্য লিজনার
+    db.ref("private_chats/" + userRoomID).on("value", (snapshot) => {
+        if(!snapshot.exists()) {
+            document.getElementById('messages').innerHTML = "";
+        }
+    });
 }
 </script>
+
 
 
 
