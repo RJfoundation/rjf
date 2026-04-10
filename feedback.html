@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -26,14 +27,21 @@
         .verify-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 121, 107, 0.3); }
         .user-info { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding: 10px; background: #e0f2f1; border-radius: 12px; }
         .user-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid #00796b; }
-        .stars-select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; margin-bottom: 15px; }
+        
+        /* নতুন স্টার রেটিং স্টাইল */
+        .star-rating { display: flex; gap: 5px; margin-bottom: 15px; cursor: pointer; font-size: 24px; }
+        .star-rating span { color: #ccc; transition: 0.2s; }
+        .star-rating span.active { color: #ffb300; }
+
         textarea { width: 100%; height: 100px; padding: 12px; border-radius: 10px; border: 1px solid #ccc; resize: none; box-sizing: border-box; }
         .submit-btn { width: 100%; margin-top: 15px; background: #00796b; color: white; padding: 12px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .review-item { background: #fafafa; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #00796b; }
-        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .review-name { font-weight: bold; color: #333; }
-        .review-stars { color: #ffb300; font-size: 14px; }
-        .review-text { font-size: 14px; color: #555; line-height: 1.5; }
+        
+        .review-item { background: #fafafa; border-radius: 12px; padding: 15px; margin-bottom: 15px; border-left: 5px solid #00796b; overflow: hidden; word-wrap: break-word; }
+        .review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; gap: 10px; }
+        .review-name { font-weight: bold; color: #333; overflow-wrap: anywhere; }
+        .review-stars { color: #ffb300; font-size: 14px; white-space: nowrap; flex-shrink: 0; }
+        .review-text { font-size: 14px; color: #555; line-height: 1.5; word-break: break-word; }
+        .review-date { font-size: 11px; color: #888; display: block; margin-top: 8px; font-style: italic; }
     </style>
 </head>
 <body>
@@ -56,14 +64,14 @@
         <div id="userInfo" class="user-info"></div>
         
         <div id="reviewInputArea">
-            <label>আপনার রেটিং সিলেক্ট করুন:</label>
-            <select id="ratingSelect" class="stars-select">
-                <option value="5">⭐⭐⭐⭐⭐ (চমৎকার)</option>
-                <option value="4">⭐⭐⭐⭐ (ভালো)</option>
-                <option value="3">⭐⭐⭐ (মোটামুটি)</option>
-                <option value="2">⭐⭐ (খারাপ)</option>
-                <option value="1">⭐ (খুবই খারাপ)</option>
-            </select>
+            <label>আপনার রেটিং দিন:</label>
+            <div class="star-rating" id="starRating">
+                <span onclick="setRating(1)">★</span>
+                <span onclick="setRating(2)">★</span>
+                <span onclick="setRating(3)">★</span>
+                <span onclick="setRating(4)">★</span>
+                <span onclick="setRating(5)">★</span>
+            </div>
             
             <textarea id="reviewText" placeholder="আমাদের সম্পর্কে আপনার মূল্যবান মতামত লিখুন..."></textarea>
             <button onclick="submitReview()" class="submit-btn">রিভিউ জমা দিন</button>
@@ -76,19 +84,17 @@
 </div>
 
 <script>
-    // --- ১ নম্বর কনসোল (লগইন প্রজেক্ট) ---
     const loginConfig = {
         apiKey: "AIzaSyD80uA81X3bkwiousPwXpIv6OKkk1k2icA",
         authDomain: "rjfoundation-25.firebaseapp.com",
         projectId: "rjfoundation-25",
         storageBucket: "rjfoundation-25.firebasestorage.app",
-            messagingSenderId: "469641336275",
+        messagingSenderId: "469641336275",
         appId: "1:469641336275:web:e79889fb0247f352f04b26"
     };
     const loginApp = firebase.initializeApp(loginConfig);
     const auth = firebase.auth(loginApp);
 
-    // --- ২ নম্বর কনসোল (রিভিউ ডাটাবেস প্রজেক্ট) ---
     const reviewConfig = {
         apiKey: "AIzaSyDC0H-DW3avFnMRmipaI3qSyYLnb2B3CEU",
         authDomain: "rating-revieww.firebaseapp.com",
@@ -99,13 +105,25 @@
     const db = firebase.firestore(reviewApp);
 
     let currentUserData = null;
+    let selectedRating = 5; // Default rating
 
-      // --- ভেরিফিকেশন লজিক (সাইন-আপ বাটন সহ) ---
+    function setRating(n) {
+        selectedRating = n;
+        const stars = document.querySelectorAll('.star-rating span');
+        stars.forEach((star, index) => {
+            if (index < n) {
+                star.classList.add('active');
+            } else {
+                star.classList.remove('active');
+            }
+        });
+    }
+    setRating(5);
+
     function verifyUser() {
         const email = document.getElementById('emailInput').value;
         const btn = document.getElementById('vBtn');
         const msg = document.getElementById('statusMsg');
-
         msg.innerHTML = ""; 
 
         if(!email) {
@@ -141,7 +159,6 @@
                     `;
                 }, 1000);
             } else {
-                // ইমেইল না পাওয়া গেলে সাইন আপ বাটন দেখানো হচ্ছে
                 msg.innerHTML = `
                     <div style="background: #ffebee; padding: 10px; border-radius: 10px; border: 1px solid #ffcdd2; margin-top: 10px;">
                         <p style="color: #d32f2f; margin-bottom: 8px;">🚫 এই ইমেইলটি আমাদের সদস্য তালিকায় নেই।</p>
@@ -149,27 +166,20 @@
                     </div>
                 `;
                 btn.disabled = false;
-                btn.innerText = "আবার চেষ্টা করুন";
+                btn.innerText = " দুঃখিত ! অনুগ্রহ করে আবার চেষ্টা করুন";
             }
         }).catch(err => {
-            if (err.code === "auth/invalid-email") {
-                msg.innerText = "❌ ভুল ইমেইল ফরম্যাট!";
-            } else {
-                msg.innerText = "⚠️ সার্ভারে সমস্যা হয়েছে! আবার চেষ্টা করুন।";
-            }
+            msg.innerText = "⚠️ আপনার ইমেইল টি সঠিক নয়!";
             msg.style.color = "red";
             btn.disabled = false;
-            btn.innerText = "ভেরিফাই করুন";
         });
     }
 
-
     function submitReview() {
         const text = document.getElementById('reviewText').value;
-        const rating = document.getElementById('ratingSelect').value;
 
         if(!text) {
-            alert("দয়া করে কিছু লিখুন!");
+            alert("দয়া আপনার রিভিউ দিন!");
             return;
         }
 
@@ -177,11 +187,11 @@
             uid: currentUserData.uid,
             userName: currentUserData.name,
             userEmail: currentUserData.email,
-            rating: parseInt(rating),
+            rating: selectedRating,
             comment: text,
             timestamp: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
-            alert("congratulations ! your review has been cancelled.");
+            alert("Congratulations! Your review has been submitted successfully.");
             location.reload(); 
         }).catch(err => {
             alert("সেভ করতে সমস্যা হয়েছে!");
@@ -194,6 +204,14 @@
             snapshot.forEach(doc => {
                 const data = doc.data();
                 const stars = "⭐".repeat(data.rating);
+                
+                // টাইমস্ট্যাম্প থেকে তারিখ ও সময় বের করা
+                let dateString = "Just now";
+                if(data.timestamp) {
+                    const date = data.timestamp.toDate();
+                    dateString = date.toLocaleDateString('bn-BD') + " | " + date.toLocaleTimeString('bn-BD', {hour: '2-digit', minute:'2-digit'});
+                }
+
                 html += `
                     <div class="review-item">
                         <div class="review-header">
@@ -201,6 +219,7 @@
                             <span class="review-stars">${stars}</span>
                         </div>
                         <p class="review-text">${data.comment}</p>
+                        <small class="review-date">তারিখ: ${dateString}</small>
                     </div>
                 `;
             });
