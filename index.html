@@ -515,7 +515,7 @@
         const lastResetKey = "last_reset_" + email.replace(/\./g, '_');
         const lastResetTime = localStorage.getItem(lastResetKey);
         const currentTime = Date.now();
-        const waitTime = 10 * 60 * 1000;
+        const waitTime = 5 * 60 * 1000;
 
         if(email && email.includes("@")) {
             if (lastResetTime && (currentTime - lastResetTime < waitTime)) {
