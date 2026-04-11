@@ -345,295 +345,42 @@
     
 
 
-<div id="chat-icon" onclick="toggleChat()" style="position: fixed; bottom: 80px; right: 15px; background: #00796b; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 24px; cursor: pointer; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 1000;">
+
+<div id="chat-icon" onclick="Tawk_API.toggle()" style="position: fixed; bottom: 100px; right: 23px; background: linear-gradient(135deg, #00796b, #004d40); color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 26px; cursor: pointer; box-shadow: 0 8px 30px rgba(0,121,107,0.4); z-index: 1000; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);">
     <i class="fas fa-comment-dots"></i> 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </div>
 
-<div id="chat-box" style="display: none; position: fixed; bottom: 100px; right: 30px; width: 325px; height: 480px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(20px); border-radius: 25px; box-shadow: 0 20px 50px rgba(0,0,0,0.2); flex-direction: column; z-index: 1000; overflow: hidden; border: 1px solid rgba(0,121,107,0.2);">
+<style>
+    /* আইকন হোভার করলে একটু বড় হবে */
+    #chat-icon:hover {
+        transform: scale(1.1) translateY(-5px);
+        box-shadow: 0 12px 35px rgba(0,121,107,0.5);
+    }
+</style>
+
+<script type="text/javascript">
+var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
+
+// উইজেট পুরোপুরি লোড হওয়ার পর সেটিংস
+Tawk_API.onLoad = function(){
+    Tawk_API.hideWidget(); // tawk.to এর নিজের বাটন লুকানো থাকবে
     
-    <div style="background: linear-gradient(135deg, #00796b, #004d40); color: white; padding: 18px; display: flex; justify-content: space-between; align-items: center;">
-        <span style="font-weight: bold;"><i class="fas fa-user-shield"></i> RJF প্রাইভেট সাপোর্ট</span>
-        <div style="display: flex; gap: 15px; align-items: center;">
-            <i class="fas fa-trash-alt" id="delete-btn" onclick="clearUserChat()" style="cursor: pointer; opacity: 0.8; font-size: 16px; display: none;" title="সব মেসেজ মুছুন"></i>
-            <i class="fas fa-times" onclick="toggleChat()" style="cursor: pointer; opacity: 0.8;"></i>
-        </div>
-    </div>
+    // ভেতরের উইন্ডো পজিশন কাস্টমাইজ (যদি চাও)
+    Tawk_API.setAttributes({
+        'id'    : '1jlukgpm1',
+        'store' : 'RJF-Support'
+    }, function(error){});
+};
 
-    <div id="messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; background: #f8f9fa;">
-        <p id="welcome-msg" style="text-align: center; color: #888; font-size: 13px; margin-top: 50px;">নিরাপদ চ্যাট শুরু করুন আমাদের নিজস্ব মেসেঞ্জারে, তাই লগইন করুন।</p>
-    </div>
-
-    <div id="chat-controls" style="padding: 15px; background: white; border-top: 1px solid #eee;">
-        
-        <div id="login-section">
-            <input type="email" id="login-email" placeholder="ইমেইল..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
-            <input type="password" id="login-pass" placeholder="পাসওয়ার্ড..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
-            <button onclick="handleLogin()" style="width: 100%; background: #00796b; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">লগইন করুন</button>
-            <p style="font-size: 12px; text-align: center;">নতুন ইউজার? <span onclick="showRegister()" style="color: #00796b; cursor: pointer; font-weight: bold;">রেজিস্ট্রেশন করুন</span></p>
-            <p onclick="showResetSection()" style="font-size: 11px; text-align: center; color: #888; cursor: pointer; margin-top: 5px;">পাসওয়ার্ড ভুলে গেছেন?</p>
-        </div>
-
-        <div id="reg-section" style="display: none;">
-            <input type="text" id="reg-name" placeholder="আপনার নাম..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
-            <input type="email" id="reg-email" placeholder="ইমেইল..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
-            <input type="password" id="reg-pass" placeholder="পাসওয়ার্ড..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
-            <button onclick="handleRegister()" style="width: 100%; background: #004d40; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">অ্যাকাউন্ট খুলুন</button>
-            <p style="font-size: 12px; text-align: center;">ইতিমধ্যে অ্যাকাউন্ট আছে? <span onclick="showLogin()" style="color: #00796b; cursor: pointer; font-weight: bold;">লগইন করুন</span></p>
-        </div>
-
-        <div id="reset-section" style="display: none;">
-            <p style="font-size: 12px; color: #555; text-align: center; margin-bottom: 10px;">আপনার ইমেইল দিন অ্যাড্রেস দিন।</p>
-            <input type="email" id="reset-email" placeholder="ইমেইল অ্যাড্রেস..." style="width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #ddd; margin-bottom: 10px; outline: none;">
-            <button onclick="handleReset()" style="width: 100%; background: #455a64; color: white; padding: 12px; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-bottom: 10px;">লিংক পাঠান</button>
-            <p onclick="showLogin()" style="font-size: 12px; text-align: center; color: #00796b; cursor: pointer; font-weight: bold;">লগইনে ফিরে যান</p>
-        </div>
-
-        <p id="chat-error" style="color: #d32f2f; font-size: 12px; text-align: center; margin-bottom: 10px; display: none; font-weight: 500;"></p>
-
-        <div id="msg-section" style="display: none;">
-            <div style="display: flex; gap: 8px;">
-                <input type="text" id="user-msg" placeholder="আপনার সমস্যা লিখুন..." style="flex: 1; padding: 12px; border-radius: 12px; border: 1px solid #ddd; outline: none;">
-                <button onclick="sendPrivateMessage()" style="background: #00796b; color: white; padding: 12px 18px; border: none; border-radius: 12px; cursor: pointer;"><i class="fas fa-paper-plane"></i></button>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-    <audio id="message-sound" src="https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3" preload="auto"></audio>
-
-    
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
-
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyAd0K18nLhmDsljRZuk4wvn9wPtHyuc7cM",
-        authDomain: "rj-chats1.firebaseapp.com",
-        projectId: "rj-chats1",
-        storageBucket: "rj-chats1.firebasestorage.app",
-        messagingSenderId: "464542067879",
-        appId: "1:464542067879:web:7c47353045bf5c7362bf82",
-        measurementId: "G-YJCGJPV1RJ",
-        databaseURL: "https://rj-chats1-default-rtdb.firebaseio.com/" 
-    };
-
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const db = firebase.database();
-    const auth = firebase.auth();
-    
-    let userRoomID = "";
-    let currentUserName = "";
-
-    // ব্রাউজার নোটিফিকেশন পারমিশন চাওয়া
-    if (Notification.permission !== "granted") {
-        Notification.requestPermission();
-    }
-
-    function toggleChat() {
-        const box = document.getElementById('chat-box');
-        box.style.display = box.style.display === 'none' ? 'flex' : 'none';
-        if (box.style.display === 'flex') {
-            document.title = "RJF Private Support";
-        }
-    }
-
-    function showStatus(msg, color = "#d32f2f") {
-        const errorEl = document.getElementById('chat-error');
-        errorEl.innerText = msg;
-        errorEl.style.color = color;
-        errorEl.style.display = 'block';
-        setTimeout(() => { errorEl.style.display = 'none'; }, 4000);
-    }
-
-    function showRegister() {
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('reset-section').style.display = 'none';
-        document.getElementById('reg-section').style.display = 'block';
-    }
-
-    function showLogin() {
-        document.getElementById('reg-section').style.display = 'none';
-        document.getElementById('reset-section').style.display = 'none';
-        document.getElementById('login-section').style.display = 'block';
-        document.getElementById('delete-btn').style.display = 'none'; // লগ আউট অবস্থায় লুকানো
-    }
-
-    function showResetSection() {
-        document.getElementById('login-section').style.display = 'none';
-        document.getElementById('reg-section').style.display = 'none';
-        document.getElementById('reset-section').style.display = 'block';
-    }
-
-    function handleRegister() {
-        const name = document.getElementById('reg-name').value.trim();
-        const email = document.getElementById('reg-email').value.trim();
-        const pass = document.getElementById('reg-pass').value.trim();
-
-        if(name && email && pass.length >= 6) {
-            auth.createUserWithEmailAndPassword(email, pass)
-                .then((userCredential) => {
-                    return userCredential.user.updateProfile({ displayName: name });
-                })
-                .then(() => {
-                    showStatus("রেজিস্ট্রেশন সফল! এখন লগইন করুন।", "#00796b");
-                    setTimeout(showLogin, 2000);
-                })
-                .catch((error) => showStatus("ভুল: " + error.message));
-        } else {
-            showStatus("সঠিক তথ্য দিন (পাসওয়ার্ড কমপক্ষে ৬ অক্ষর)");
-        }
-    }
-
-    function handleLogin() {
-        const email = document.getElementById('login-email').value.trim();
-        const pass = document.getElementById('login-pass').value.trim();
-
-        if(email && pass) {
-            auth.signInWithEmailAndPassword(email, pass)
-                .then((userCredential) => {
-                    const user = userCredential.user;
-                    currentUserName = user.displayName || "User";
-                    userRoomID = user.email.replace(/\./g, ',');
-                    
-                    document.getElementById('login-section').style.display = 'none';
-                    document.getElementById('reg-section').style.display = 'none';
-                    document.getElementById('reset-section').style.display = 'none';
-                    document.getElementById('msg-section').style.display = 'block';
-                    document.getElementById('welcome-msg').style.display = 'none';
-                    document.getElementById('delete-btn').style.display = 'inline-block'; // ডিলিট বাটন দেখানো
-                    document.getElementById('messages').innerHTML = "";
-                    
-                    loadPrivateMessages();
-                })
-                .catch((error) => showStatus("ইমেইল বা পাসওয়ার্ড ভুল!"));
-        } else {
-            showStatus("ইমেইল এবং পাসওয়ার্ড দিন!");
-        }
-    }
-
-    function handleReset() {
-        const email = document.getElementById('reset-email').value.trim();
-        const lastResetKey = "last_reset_" + email.replace(/\./g, '_');
-        const lastResetTime = localStorage.getItem(lastResetKey);
-        const currentTime = Date.now();
-        const waitTime = 5 * 60 * 1000;
-
-        if(email && email.includes("@")) {
-            if (lastResetTime && (currentTime - lastResetTime < waitTime)) {
-                const timeLeft = waitTime - (currentTime - lastResetTime);
-                const minutes = Math.floor(timeLeft / 60000);
-                const seconds = Math.floor((timeLeft % 60000) / 1000);
-                showStatus(`আপনি ${minutes} মিনিট ${seconds} সেকেন্ড পর পুনরায় চেষ্টা করতে পারবেন।`, "#d32f2f");
-                return;
-            }
-
-            auth.sendPasswordResetEmail(email)
-                .then(() => {
-                    localStorage.setItem(lastResetKey, currentTime);
-                    showStatus("রিসেট লিংক ইমেইলে পাঠানো হয়েছে।", "#00796b");
-                    setTimeout(showLogin, 3000);
-                })
-                .catch((error) => showStatus("এই ইমেইলটি খুঁজে পাওয়া যায়নি!"));
-        } else {
-            showStatus("দয়া করে সঠিক ইমেইলটি লিখুন।");
-        }
-    }
-
-    function sendToTelegram(name, email, message) {
-        const token = "8619051804:AAHG77QU26209xHaXW9c5scVLOdX4q97-R4";
-        const chatId = "8197731054"; 
-        const text = `🔔 নতুন মেসেজ!\n👤 নাম: ${name}\n📧 ইমেইল: ${email}\n💬 মেসেজ: ${message}`;
-        fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(text)}`);
-    }
-
-    function sendPrivateMessage() {
-        const msgInput = document.getElementById('user-msg');
-        const message = msgInput.value.trim();
-        
-        if(message !== "" && userRoomID !== "") {
-            db.ref("private_chats/" + userRoomID).push({
-                sender: "user",
-                userName: currentUserName,
-                text: message,
-                timestamp: firebase.database.ServerValue.TIMESTAMP
-            });
-
-            const userEmail = userRoomID.replace(/,/g, '.');
-            sendToTelegram(currentUserName, userEmail, message);
-            msgInput.value = "";
-        }
-    }
-
-    // মেসেজ ডিলিট করার ফাংশন
-    function clearUserChat() {
-        if(userRoomID !== "") {
-            if(confirm("আপনি কি আপনার সব মেসেজ ডিলিট করতে চান? এটি ডাটাবেস থেকে স্থায়ীভাবে মুছে যাবে।")) {
-                db.ref("private_chats/" + userRoomID).remove()
-                .then(() => {
-                    document.getElementById('messages').innerHTML = "";
-                    showStatus("আপনার সব মেসেজ মুছে ফেলা হয়েছে!", "#00796b");
-                })
-                .catch((error) => {
-                    showStatus("মুছে ফেলতে ব্যর্থ: " + error.message);
-                });
-            }
-        }
-    }
-
-    function loadPrivateMessages() {
-    db.ref("private_chats/" + userRoomID).off();
-    db.ref("private_chats/" + userRoomID).on("child_added", (snapshot) => {
-        const data = snapshot.val();
-        const msgDiv = document.getElementById('messages');
-        const isMe = data.sender === "user";
-
-        const msgHtml = `
-            <div style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; 
-                        background: ${isMe ? '#00796b' : '#ffffff'}; 
-                        color: ${isMe ? '#fff' : '#333'}; 
-                        padding: 10px 15px; border-radius: 18px; 
-                        max-width: 80%; font-size: 14px; 
-                        box-shadow: 0 3px 10px rgba(0,0,0,0.05);
-                        border: ${isMe ? 'none' : '1px solid #ddd'};">
-                ${data.text}
-            </div>
-        `;
-        msgDiv.innerHTML += msgHtml;
-        msgDiv.scrollTop = msgDiv.scrollHeight;
-
-        if (!isMe) { 
-            // ট্যাব টাইটেল পরিবর্তন
-            document.title = "🔔 নতুন মেসেজ এসেছে!";
-            
-            // ব্রাউজার পপ-আপ নোটিফিকেশন
-            if (Notification.permission === "granted") {
-                new Notification("RJF Support", { 
-                    body: "আপনি একটি নতুন মেসেজ পেয়েছেন: " + data.text,
-                    icon: "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" 
-                });
-            }
-
-            const sound = document.getElementById('message-sound');
-            sound.play().catch(error => {
-                console.log("সাউন্ড প্লে হতে বাধা পেয়েছে (ব্রাউজার পলিসি):", error);
-            });
-        }
-    });
-
-    // ডাটা ডিলিট হলে স্ক্রিন ক্লিয়ার করার জন্য লিজনার
-    db.ref("private_chats/" + userRoomID).on("value", (snapshot) => {
-        if(!snapshot.exists()) {
-            document.getElementById('messages').innerHTML = "";
-        }
-    });
-}
+(function(){
+var s1=document.createElement("script"),s0=document.getElementsByTagName("script")[0];
+s1.async=true;
+s1.src='https://embed.tawk.to/69da70bd37c8091c32de07f5/1jlukgpm1';
+s1.charset='UTF-8';
+s1.setAttribute('crossorigin','*');
+s0.parentNode.insertBefore(s1,s0);
+})();
 </script>
-
 
 
 
