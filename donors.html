@@ -262,6 +262,88 @@ s0.parentNode.insertBefore(s1,s0);
 <!--End of Tawk.to Script-->
 
 
+
+
+<div id="newScrollTop" style="
+    position: fixed;
+    right: 25px;
+    top: 75%;
+    transform: translateY(-50%) translateX(100px);
+    background: rgba(0, 121, 107, 0.2);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    color: white;
+    width: 55px;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50px 15px 15px 50px;
+    cursor: pointer;
+    z-index: 10000;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    visibility: hidden;
+">
+    <div style="
+        background: #00796b;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 4px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    ">
+        <i class="fas fa-chevron-up" style="font-size: 18px;"></i>
+    </div>
+    <span style="font-size: 8px; font-weight: 900; color: green; letter-spacing: 0.05px;">উপরে যান</span>
+</div>
+
+<script>
+(function() {
+    const btn = document.getElementById('newScrollTop');
+    
+    // স্ক্রল ইভেন্ট লিসেনার
+    window.addEventListener('scroll', function() {
+        let scrollPos = window.pageYOffset || document.documentElement.scrollTop;
+        
+        if (scrollPos > 300) {
+            btn.style.opacity = "1";
+            btn.style.visibility = "visible";
+            btn.style.transform = "translateY(-50%) translateX(0)";
+        } else {
+            btn.style.opacity = "0";
+            btn.style.visibility = "hidden";
+            btn.style.transform = "translateY(-50%) translateX(100px)";
+        }
+    });
+
+    // হোভার ইফেক্টস (মাউস নিলে কালার চেঞ্জ হবে)
+    btn.onmouseover = function() {
+        this.style.background = "rgba(0, 121, 107, 0.15)";
+        this.style.borderColor = "#00796b";
+    };
+    btn.onmouseout = function() {
+        this.style.background = "rgba(0, 121, 107, 0.2)";
+        this.style.borderColor = "rgba(255, 255, 255, 0.2)";
+    };
+
+    // ক্লিক করলে স্মুথলি উপরে যাওয়ার ফাংশন
+    btn.onclick = function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    };
+})();
+</script>
+
+    
     
 </body>
 </html>
