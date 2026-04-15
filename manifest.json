@@ -1,7 +1,7 @@
 {
   "name": "Rupsha Jonokollan Foundation",
   "short_name": "RJ-Foundation",
-  "start_url": "/",
+  "start_url": "/rjf/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#008040",
