@@ -8,6 +8,9 @@
   <script src="/_sdk/element_sdk.js"></script>
   <script src="/_sdk/data_sdk.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
@@ -26,9 +29,112 @@
     ::-webkit-scrollbar-track { background: #f1f5f9; }
     ::-webkit-scrollbar-thumb { background: #10b981; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #059669; }
+
+    /* --- Side Navigation Menu Styles --- */
+    .menu-toggle-btn {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 1001;
+      background: #10b981;
+      color: white;
+      border: none;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      font-size: 24px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .menu-toggle-btn:hover {
+      transform: scale(1.1);
+      background: #059669;
+    }
+    .menu-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1002;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease-in-out;
+      backdrop-filter: blur(4px);
+    }
+    .menu-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -320px;
+      width: 300px;
+      height: 100vh;
+      background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+      color: white;
+      z-index: 1003;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+      overflow-y: auto;
+    }
+    .side-menu.active {
+      left: 0;
+    }
+    .side-menu a {
+      display: flex;
+      align-items: center;
+      padding: 16px 28px;
+      color: #e2e8f0;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      transition: all 0.3s ease;
+    }
+    .side-menu a i {
+      width: 35px;
+      font-size: 1.2rem;
+      color: #34d399;
+      transition: all 0.3s ease;
+    }
+    .side-menu a:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      padding-left: 35px;
+    }
+    .side-menu a:hover i {
+      color: white;
+      transform: scale(1.1);
+    }
   </style>
  </head>
  <body class="h-full bg-slate-100 overflow-auto">
+
+  <button class="menu-toggle-btn" onclick="toggleSideMenu()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div class="menu-overlay" id="overlay" onclick="toggleSideMenu()"></div>
+
+  <nav class="side-menu" id="sideMenu">
+      <div class="px-6 py-8 border-b border-emerald-700/50 mb-2 flex justify-between items-center">
+          <h2 class="text-2xl font-bold text-white tracking-wide">মেন্যু</h2>
+          <button onclick="toggleSideMenu()" class="text-white text-3xl hover:text-red-400 transition-colors">&times;</button>
+      </div>
+      <a href="index.html"><i class="fas fa-home"></i> Home</a>
+      <a href="donate.html"><i class="fas fa-hand-holding-heart"></i> Donate</a>
+      <a href="selection.html"><i class="fas fa-user-check"></i> Membership</a>
+      <a href="meeting.html"><i class="fas fa-video"></i> Meeting</a>
+      <a href="Https://imran-examiner.github.io/Exam/"><i class="fas fa-graduation-cap"></i> Student Portal</a>
+      
+      <div class="mt-12 px-6 pb-6 text-center text-emerald-300/60 text-sm">
+        <p>RJ Foundation</p>
+      </div>
+  </nav>
   <div id="app-container" class="min-h-full w-full">
    <header class="gradient-bg text-white py-8 px-4">
     <div class="max-w-4xl mx-auto text-center">
@@ -38,6 +144,7 @@
        </svg>
       </div>
      </div>
+     
      <h1 id="org-name" class="text-3xl md:text-4xl font-bold mb-2">রুপসা জনকল্যাণ ফাউন্ডেশন সদস্য নির্বাচনী ফরম</h1>
      <p class="text-emerald-100 text-lg">সেবা হোক প্রত্যয়,জনকল্যাণ হোক জয়</p>
      <div class="mt-4 inline-flex items-center gap-2 bg-white/20 px-4 py-2 rounded-full"><span class="w-2 h-2 bg-emerald-300 rounded-full animate-pulse"></span> <span id="form-title" class="text-sm">live selection</span>
@@ -168,6 +275,15 @@
   </div>
 
   <script>
+    // Menu Toggle Function Added
+    function toggleSideMenu() {
+        const sideMenu = document.getElementById('sideMenu');
+        const overlay = document.getElementById('overlay');
+        
+        sideMenu.classList.toggle('active');
+        overlay.classList.toggle('active');
+    }
+
     function showFormView() {
       document.getElementById('form-view').classList.remove('hidden');
       document.getElementById('list-view').classList.add('hidden');
@@ -286,7 +402,6 @@
 
 
 
-<!--Start of Tawk.to Script-->
 <script type="text/javascript">
 var Tawk_API=Tawk_API||{}, Tawk_LoadStart=new Date();
 
@@ -313,11 +428,6 @@ s1.setAttribute('crossorigin','*');
 s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
-<!--End of Tawk.to Script-->
-
-
-
-
 <div id="newScrollTop" style="
     position: fixed;
     right: 25px;
@@ -397,7 +507,5 @@ s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 
-  
-  
  </body>
 </html>
