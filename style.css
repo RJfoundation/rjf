@@ -1006,19 +1006,3 @@ body.dark-mode .main-footer {
 }
 
 
-
-
-
-
-/* ওয়ানসিগন্যাল বেল বাটন উপরে নেওয়ার কোড */
-#onesignal-bell-container.onesignal-bell-container-bottom-left {
-    bottom: auto !important;
-    top: 20px !important;
-}
-
-#onesignal-bell-container.onesignal-bell-container-bottom-right {
-    bottom: auto !important;
-    top: 20px !important;
-}
-
-
