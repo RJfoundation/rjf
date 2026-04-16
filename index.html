@@ -31,6 +31,36 @@
 </head>
 <body>
 
+
+
+<div id="rj-notification-wrapper">
+    <div id="rj-notif-bell" onclick="toggleRJNotif()">
+        <i class="fa-solid fa-bell"></i>
+        <span id="rj-notif-badge" class="rj-hidden">0</span>
+    </div>
+
+    <div id="rj-notif-inbox" class="rj-notif-closed">
+        <div class="rj-notif-header">
+            <span>নোটিফিকেশন সেন্টার</span>
+            <button onclick="clearAllRJNotifs()">সব মুছুন</button>
+        </div>
+        
+        <div id="rj-notif-content">
+            <div id="rj-empty-state">
+                <i class="fa-solid fa-envelope-open"></i>
+                <p>কোনো নতুন আপডেট নেই</p>
+            </div>
+        </div>
+        
+        <div class="rj-notif-footer">
+            <small>RJ Foundation Digital Support</small>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    
+
     <header id="main-header">
         <canvas id="fireworks-canvas"></canvas>
         
