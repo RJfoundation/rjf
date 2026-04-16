@@ -224,15 +224,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
 
-
 window.OneSignal = window.OneSignal || [];
 OneSignal.push(function() {
-    // নোটিফিকেশন আসা মাত্র সেভ হবে
-    OneSignal.on('notificationDisplay', function(event) {
+    // এটি নোটিফিকেশন আসা মাত্র কাজ শুরু করবে
+    OneSignal.on('notificationForegroundWillDisplay', function(event) {
+        let notification = event.notification;
         let notifs = JSON.parse(localStorage.getItem('notif_list')) || [];
         notifs.unshift({
-            title: event.heading || "নতুন আপডেট",
-            body: event.content || "",
+            title: notification.title || "নতুন আপডেট",
+            body: notification.body || "",
             time: new Date().toLocaleString('bn-BD')
         });
         localStorage.setItem('notif_list', JSON.stringify(notifs));
