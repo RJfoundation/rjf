@@ -218,3 +218,57 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 
+
+
+
+
+
+
+
+window.OneSignal = window.OneSignal || [];
+OneSignal.push(function() {
+    // নোটিফিকেশন আসা মাত্র সেভ হবে
+    OneSignal.on('notificationDisplay', function(event) {
+        let notifs = JSON.parse(localStorage.getItem('notif_list')) || [];
+        notifs.unshift({
+            title: event.heading || "নতুন আপডেট",
+            body: event.content || "",
+            time: new Date().toLocaleString('bn-BD')
+        });
+        localStorage.setItem('notif_list', JSON.stringify(notifs));
+        renderNotifs();
+    });
+});
+
+function toggleRJNotif() {
+    document.getElementById('rj-notif-inbox').classList.toggle('rj-notif-closed');
+    document.getElementById('rj-notif-badge').classList.add('rj-hidden');
+}
+
+function renderNotifs() {
+    const container = document.getElementById('rj-notif-content');
+    const badge = document.getElementById('rj-notif-badge');
+    let notifs = JSON.parse(localStorage.getItem('notif_list')) || [];
+
+    if (notifs.length > 0) {
+        badge.innerText = notifs.length;
+        badge.classList.remove('rj-hidden');
+        container.innerHTML = notifs.map(n => `
+            <div class="rj-notif-item">
+                <span class="rj-notif-title">${n.title}</span>
+                <span class="rj-notif-body">${n.body}</span>
+                <span class="rj-notif-time">${n.time}</span>
+            </div>
+        `).join('');
+    } else {
+        container.innerHTML = `<div id="rj-empty-state"><i class="fa-solid fa-envelope-open"></i><p>কোনো নতুন আপডেট নেই</p></div>`;
+        badge.classList.add('rj-hidden');
+    }
+}
+
+function clearAllRJNotifs() {
+    localStorage.removeItem('notif_list');
+    renderNotifs();
+}
+
+document.addEventListener('DOMContentLoaded', renderNotifs);
