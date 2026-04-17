@@ -418,126 +418,69 @@ header {
 .dark-mode .section-title h2 { color: #fff; }
 
 
-/* নেতৃত্ব সেকশন স্টাইল */
-.leadership-section {
-    padding: 20px;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-}
 
-.section-title-leadership {
-    color: #00796b; /* আপনার ভেরিয়েবল কালার না থাকলে এটা কাজ করবে */
-    text-align: center;
-    margin-bottom: 20px;
-}
 
-.leadership-grid {
+
+
+/* বাটনকে মাঝখানে রাখার জন্য কন্টেইনার */
+.button-container {
     display: flex;
-    flex-wrap: wrap;
     justify-content: center;
-    gap: 20px;
-}
-
-.member-item {
-    text-align: center;
-    width: 130px;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-.member-item:hover {
-    transform: scale(1.05);
-}
-
-.member-thumb {
-    width: 85px;
-    height: 85px;
-    border-radius: 50%;
-    border: 3px solid #ff5722; /* একসেন্ট কালার */
-    padding: 3px;
-    object-fit: cover;
-}
-
-.member-item h4 {
-    font-size: 14px;
-    margin: 8px 0 2px;
-    color: #333;
-}
-
-.member-item p {
-    font-size: 11px;
-    color: #666;
-}
-
-/* পপআপ (Modal) মেইন স্টাইল */
-.custom-modal {
-    display: none; /* শুরুতে বন্ধ থাকবে */
-    position: fixed;
-    z-index: 10000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.8);
-    backdrop-filter: blur(5px);
     align-items: center;
-    justify-content: center;
+    width: 100%;
 }
 
-.custom-modal-content {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 20px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
+/* মেইন প্রিমিয়াম বাটন */
+.premium-btn {
     position: relative;
-    animation: zoomEffect 0.3s ease;
-}
-
-@keyframes zoomEffect {
-    from { transform: scale(0.7); opacity: 0; }
-    to { transform: scale(1); opacity: 1; }
-}
-
-.close-btn {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    font-size: 28px;
-    color: #888;
-    cursor: pointer;
-}
-
-.modal-img-circle {
-    width: 110px;
-    height: 110px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #00796b;
-    margin-bottom: 15px;
-}
-
-.modal-name-text { font-size: 20px; margin: 10px 0 5px; color: #00796b; }
-.modal-role-text { font-weight: bold; color: #888; margin-bottom: 15px; font-size: 14px; }
-.modal-desc-text { font-size: 14px; line-height: 1.6; color: #444; }
-
-.modal-close-btn {
-    margin-top: 20px;
-    background: #ff5722;
+    padding: 15px 35px;
+    font-size: 18px;
+    font-weight: 600;
     color: white;
+    background: linear-gradient(45deg, #ff0055, #7000ff, #00d4ff);
+    background-size: 200% 200%;
     border: none;
-    padding: 10px 25px;
-    border-radius: 10px;
-    font-weight: bold;
+    border-radius: 12px;
     cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    animation: gradientMove 3s infinite linear;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
-/* ডার্ক মোড সাপোর্ট */
-.dark-mode .custom-modal-content { background: #1e1e1e; color: #fff; }
-.dark-mode .modal-desc-text { color: #ccc; }
-.dark-mode .member-item h4 { color: #fff; }
+/* গ্রেডিয়েন্ট অ্যানিমেশন */
+@keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* হভার ইফেক্ট */
+.premium-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(112, 0, 255, 0.4);
+    letter-spacing: 1px;
+}
+
+/* গ্লো ইফেক্ট */
+.btn-glow {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.premium-btn:hover .btn-glow {
+    opacity: 1;
+}
+
+
+
 
 /* লোকেশন সেকশন স্টাইল */
 .location-section {
