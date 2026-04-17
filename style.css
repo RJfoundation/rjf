@@ -422,7 +422,6 @@ header {
 
 
 
-/* বাটনকে মাঝখানে রাখার জন্য কন্টেইনার */
 .button-container {
     display: flex;
     justify-content: center;
@@ -430,13 +429,14 @@ header {
     width: 100%;
 }
 
-/* মেইন প্রিমিয়াম বাটন */
 .premium-btn {
     position: relative;
+    display: inline-block; /* লিঙ্কের জন্য এটি প্রয়োজন */
     padding: 15px 35px;
     font-size: 18px;
     font-weight: 600;
     color: white;
+    text-decoration: none; /* লিঙ্কের আন্ডারলাইন সরানোর জন্য */
     background: linear-gradient(45deg, #ff0055, #7000ff, #00d4ff);
     background-size: 200% 200%;
     border: none;
@@ -446,23 +446,21 @@ header {
     transition: all 0.4s ease;
     animation: gradientMove 3s infinite linear;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
 }
 
-/* গ্রেডিয়েন্ট অ্যানিমেশন */
 @keyframes gradientMove {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* হভার ইফেক্ট */
 .premium-btn:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(112, 0, 255, 0.4);
-    letter-spacing: 1px;
+    color: white; /* হোভারে টেক্সট সাদা রাখার জন্য */
 }
 
-/* গ্লো ইফেক্ট */
 .btn-glow {
     position: absolute;
     top: -50%;
