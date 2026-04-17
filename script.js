@@ -272,3 +272,24 @@ function clearAllRJNotifs() {
 }
 
 document.addEventListener('DOMContentLoaded', renderNotifs);
+
+
+
+
+
+
+
+const premiumBtn = document.querySelector('.premium-btn');
+
+if (premiumBtn) {
+    premiumBtn.addEventListener('click', function() {
+        // ক্লিক করলে সামান্য স্কেল ডাউন হবে
+        this.style.transform = "scale(0.95)";
+        setTimeout(() => {
+            this.style.transform = "scale(1)";
+        }, 100);
+        
+        console.log("Button clicked!");
+    });
+}
+
