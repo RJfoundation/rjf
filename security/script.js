@@ -106,7 +106,7 @@ async function handleEmailVerification() {
     try {
         await auth.applyActionCode(actionCode);
         showMsg("সফল! আপনার ইমেইল নিরাপদভাবে ভেরিফাই হয়েছে।", true);
-        setTimeout(() => window.location.href = "donate.html", 3000);
+        setTimeout(() => window.location.href = "/meeting/", 3000);
     } catch (error) {
         showMsg("লিঙ্কটি আর কাজ করছে না। দয়া করে নতুন লিঙ্ক রিকোয়েস্ট করুন।");
         toggleLoading(btn, false);
